@@ -74,5 +74,22 @@ class Game:
     
     def ai_move(self, board):
         self.board = board
+        Board.print_kings(board)
+        Board.print_pawns(board)
         self.change_turn()
-        
+    def has_valid_moves(self, board, color):
+        """
+        Checks if there are any valid moves for a given color on the board.
+
+        Args:
+            board: The current board state.
+            color: The color of the player to check (e.g., RED or WHITE).
+
+        Returns:
+            True if there are valid moves, False otherwise.
+        """
+        for piece in board.get_all_peices(color):
+            valid_moves = board.get_valid_moves(piece)
+            if valid_moves:  # If there is at least one valid move
+                return True
+        return False

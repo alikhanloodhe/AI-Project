@@ -20,7 +20,8 @@ class Piece:
 
     def make_king(self):
         self.king = True
-    
+    def is_king(self):
+        return self.king;
     def draw(self, win):
         radius = SQUARE_SIZE//2 - self.PADDING
         # In drawing the circle we give surface e.g win and color e.g Grey and center e.g x,y and radius

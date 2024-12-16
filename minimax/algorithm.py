@@ -57,3 +57,46 @@ def draw_moves(game,board,peice):
     game.draw_valid_moves(valid_moves.keys())
     pygame.display.update()
     pygame.time.delay(100)
+
+def alpha_beta(position, depth, alpha, beta, max_player, game):
+    """
+    Implements the minimax algorithm with alpha-beta pruning.
+
+    Args:
+        position: The current board state.
+        depth: The depth to explore in the game tree.
+        alpha: The best already explored option along the path to the root for the maximizer.
+        beta: The best already explored option along the path to the root for the minimizer.
+        max_player: Boolean, True if maximizing player (White), False otherwise.
+        game: The game object for board interactions.
+
+    Returns:
+        A tuple containing the evaluation value and the best board state.
+    """
+    if depth == 0 or position.winner() is not None:
+        return position.evaluate(), position
+
+    if max_player:
+        max_eval = float('-inf')
+        best_move = None
+        for move in get_all_moves(position, WHITE, game):
+            evaluation = alpha_beta(move, depth - 1, alpha, beta, False, game)[0] # As the function returns two args and we are interested in one only the evaluation value
+            max_eval = max(max_eval, evaluation)
+            if max_eval == evaluation:
+                best_move = move
+            alpha = max(alpha, evaluation)
+            if beta <= alpha:
+                break
+        return max_eval, best_move
+    else:
+        min_eval = float('inf')
+        best_move = None
+        for move in get_all_moves(position, RED, game):
+            evaluation = alpha_beta(move, depth - 1, alpha, beta, True, game)[0]
+            min_eval = min(min_eval, evaluation)
+            if min_eval == evaluation:
+                best_move = move
+            beta = min(beta, evaluation)
+            if beta <= alpha:
+                break
+        return min_eval, best_move

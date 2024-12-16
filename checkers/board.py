@@ -25,9 +25,11 @@ class Board:
                 piece.make_king()
                 if piece.color == WHITE:
                     self.white_kings += 1
+                    self.white_pawn -= 1
                 else:
                     self.red_kings += 1 
-                print(f"Red Kings: {self.red_kings} white kings: {self.white_kings}")
+                    self.red_pawn -= 1
+                
 
     def get_piece(self, row, col): # as board is a two dimensional array get_peice will give the element at the given row and col 
         return self.board[row][col] 
@@ -75,14 +77,20 @@ class Board:
             self.board[piece.row][piece.col] = 0
             if piece != 0:
                 if piece.color == RED:
-                    self.red_pawn -= 1
+                    if piece.is_king():
+                        self.red_kings -= 1
+                    else:
+                        self.red_pawn -= 1
                 else:
-                    self.white_pawn -= 1
+                    if piece.is_king():
+                        self.white_kings -=1
+                    else:
+                        self.white_pawn -= 1
     
     def winner(self): # if any of the peices become 0 than winner function return the one which win
-        if self.red_pawn <= 0:
-            return WHITE
-        elif self.white_pawn <= 0:
+        if self.red_pawn <= 0 and self.red_kings<=0:
+            return WHITE 
+        elif self.white_pawn <= 0 and self.white_kings<=0:
             return RED
         
         return None 
@@ -167,3 +175,7 @@ class Board:
             right += 1
         
         return moves
+    def print_kings(board):
+        print(f"Red Kings: {board.red_kings} white kings: {board.white_kings}")
+    def print_pawns(board):
+        print(f"Red Pawns: {board.red_pawn} White Pawns: {board.white_pawn}")
